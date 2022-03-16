@@ -1,5 +1,5 @@
 {
-  "name": "group11_sprint1_website",
+  "name": "group6",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/e4nthony/Group11_Sprint1_Website.git"
+    "url": "git+https://github.com/annapupko/Software-management-project.git"
   },
-  "author": "Anthony Epshtein, Alon Ben, Anna Pupko, Alina Podoba",
+  "author": "Anna Pupko, Alina Podoba",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/e4nthony/Group11_Sprint1_Website/issues"
+    "url": "https://github.com/annapupko/Software-management-project/issues"
   },
-  "homepage": "https://github.com/e4nthony/Group11_Sprint1_Website#readme",
+  "homepage": "https://github.com/annapupko/Software-management-project#readme",
   "devDependencies": {
     "@types/chai": "^4.2.15",
     "@types/mocha": "^8.2.1",
