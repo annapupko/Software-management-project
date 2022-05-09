@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Appointment - ADEN</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans:400" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+  <!-- Vendor CSS Files -->
+  <link href="vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+
+  <!-- Template Main CSS File -->
+  <link href="css/appointments.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+
+  <%- include('partials/header'); %>
+
+  <!-- End Header -->
+
+  <div id="booking" class="section">
+    <div class="section-center">
+        <div class="container">
+            <div class="row">
+                <div class="booking-form">
+                    <form action="/appointments" method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <span class="form-label">Name</span>
+                                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <span class="form-label">Email</span>
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <span class="form-label">Date</span>
+                                    <input class="form-control" type="date" min="2000-01-01" max="2099-01-01" name="date" id="date" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <span class="form-label">Time</span>
+                                    <input class="form-control" type="time" name="time" id="time" required>
+                                </div>
+                            </div>
+                        
+                            
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <span class="form-label">name</span>
+                                    <select name="doctor" id="doctor" class="form-control" required>
+                                        <option value="">Other</option>
+                                        <%
+                                        if(doc_sess){
+                                        doc_sess.forEach(function(data){
+                                        %>
+                                            <%
+                                            if(data.work_clinic === user_sess.clinic){
+                                            %>
+                                            <option value = "<%=data.user_name %>" > <%=data.user_name %> </option>
+                                            <% } %>
+                                        <%}) %>
+                                        <% } else{ %>
+                                            <option value="Alexander Harper">Alexander Harper</option>
+                                        <% } %>
+
+                                    </select>
+                                    <span class="select-arrow"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <span class="form-label">Service</span>
+                                    <select name="department" id="Service" class="form-control" required>
+                                        <option value="">Other</option>
+                                        <option value="Doctor">Doctor</option>
+                                        <option value="Hair salon">Hair salon</option>
+                                        <option value="Nails">Nails</option>
+
+                                    </select>
+                                    <span class="select-arrow"></span>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <span class="form-label">Phone</span>
+                                    <input type="tel" name="phone" class="form-control" id="phone" placeholder="Your Phone"  pattern="05[0-9]{8}"required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-14">
+                                <div class="form-group">
+                                    <span class="form-label">Message</span>
+                                    <textarea class="form-control" name="message" rows="5" placeholder="Message (Optional)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-btn">
+                                    <button type="submit" onclick="appointmentpopup()" class="submit-btn">Make an appointment</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <!-- ======= Footer ======= -->
+ 
+  <%- include('partials/footer'); %>
+
+  <!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="vendor/purecounter/purecounter.js"></script>
+  <script src="vendor/swiper/swiper-bundle.min.js"></script>
+
+
+  <script>
+    /* make appointments only in available time */
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+    var yyyy = today.getFullYear();
+    if(dd<10){
+    dd='0'+dd
+    } 
+    if(mm<10){
+    mm='0'+mm
+    } 
+
+    today = yyyy+'-'+mm+'-'+dd;
+    document.getElementById("date").setAttribute("min", today);
+
+    console.log(today)
+
+  </script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <script>
+    function appointmentpopup() {
+        if(document.getElementById("phone").value.length == 10){
+            swal({
+            title: "Thanks!",
+            text: "The appointment was saved successfully",
+            type: "success"
+            }).then(function() {
+                location.href = "/";
+                });
+            }
+        }
+  </script>
+
+
+
+    
+
+  <!--===============================================================================================-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Template Main JS File -->
+
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>

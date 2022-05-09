@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Sign Up</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link rel="stylesheet" href="fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+
+  <!-- Vendor CSS Files -->
+  <link href="vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link rel="stylesheet" href="css/signup-css/style.css">
+
+  <script src="https://smtpjs.com/v3/smtp.js"></script> 
+
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+
+  <%- include('partials/header'); %>
+
+<!-- End Header -->
+
+
+
+
+
+<div class="wrapper">
+    <div class="image-holder">
+        <img src="img/registration-form-8.jpg" alt="">
+    </div>
+    <div class="form-inner">
+
+        <form action="/signup" method="POST">
+            <div class="form-header">
+                <h3>Sign up</h3>
+                <img src="img/sign-up.png" alt="" class="sign-up-icon">
+            </div>
+
+            <div class="form-group">
+                <label for="">Username:</label>
+                <input type="text" class="form-control" data-validation="length alphanumeric" data-validation-length="3-12" name="user_name">
+            </div>
+            <div class="form-group">
+                <label for="">E-mail:</label>
+                <input id="email" type="text" class="form-control" data-validation="email" name="email">
+            </div>
+            <div class="form-group" >
+                <label for="">Password:</label>
+                <input type="password" class="form-control" data-validation="length" data-validation-length="min8" name="password">
+            </div>
+
+            <div class="col-md-7">
+              <div class="form-group">
+
+
+                  <span class="select-arrow"></span>
+              </div>
+          </div> 
+
+
+            <div class="form-group">
+              <label for="doctor">
+                <input type="checkbox" id="doctor" onclick="doctorFunction()">service provider?&nbsp;
+              </label>
+            </div>   
+  
+            <p id="text" style="display:none">until the admin confirm you are a service provider, you registered as a simple user</p>
+
+            <div class="col-md-7" id="d_clinic" style="display:none">
+              <div class="form-group">
+
+
+                  <span class="select-arrow"></span>
+              </div>
+          </div> 
+
+          <div class="col-md-7" id="d_specialty" style="display:none">
+            <div class="form-group">
+
+
+                <span class="select-arrow"></span>
+            </div>
+        </div> 
+
+            <div id="inp" class="form-group" style="display:none">
+                <label for="">ServiceID:</label>
+                <input id="dID" type="password" class="form-control" data-validation="length" data-validation-length="min5" name="doctorID" >
+            </div>
+            <input id="sendEmailButton" type="button" value="Request for approval" onclick="sendEmail()" style="display:none"/>
+
+            <div class="flash-container">
+              <% const messages = getMessages() %>
+            
+              <% if (messages) { %>
+                   <% Object.entries(messages).forEach((obj) => { %>
+                       <% var category = obj[0] %>
+                       <% var message = obj[1] %>
+                       <!--
+                           BOOTSTRAP ALERTS
+                           https://getbootstrap.com/docs/5.0/components/alerts/#dismissing
+                       -->
+                       <% if (category === 'danger' || category === 'success') { %>
+                       <div class="alert alert-<%= category %> alert-dismissible fade show" role="alert" >
+                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                           <%= message %>
+                       </div>
+                       <% } %>
+            
+                   <% }) %>
+              <% } %>
+            </div>
+
+            <button type="submit">create my account</button>
+        </form>
+
+    </div>
+    
+</div>
+
+
+
+
+  <!-- ======= Footer ======= -->
+ 
+  <%- include('partials/footer'); %>
+
+  <!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Template Main JS File -->
+    <script src="js/signup-js/jquery-3.3.1.min.js"></script>
+    <script src="js/signup-js/jquery.form-validator.min.js"></script>
+    <script src="js/signup-js/main.js"></script>
+
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+
+    <script>
+      function doctorFunction() {
+        var checkBox = document.getElementById("doctor");
+        var specialty = document.getElementById("d_specialty");
+        var clinic = document.getElementById("d_clinic");
+        var text = document.getElementById("text");
+        var inp = document.getElementById("inp");
+        var sendEmailButton = document.getElementById("sendEmailButton");
+        if (checkBox.checked == true){
+          text.style.display = "block";
+          specialty.style.display = "block";
+          clinic.style.display = "block";
+          inp.style.display = "block";
+          sendEmailButton.style.display = "block";
+        } else {
+           text.style.display = "none";
+           specialty.style.display = "none";
+           clinic.style.display = "none";
+           inp.style.display = "none";
+           sendEmailButton.style.display = "none";
+        }
+      }
+      </script>
+
+    <script>
+      function sendEmail() {
+
+        if(document.getElementById("dID").value.length >= 5){
+          sendEmailButton.style.display = "none";
+          var str = "click here";
+          var link_to = str.link("https://cloud.mongodb.com/v2/604c7c2e1347fc06bb1299df#metrics/replicaSet/604c7d455c87972c60a2856a/explorer/MedicalDB/users/find");
+          Email.send({
+          Host: "smtp.live.com",
+          Username : "MedicalAdmi@hotmail.com",
+          Password : "Ade123321!",
+          To : 'MedicalAdmi@hotmail.com',
+          From : "MedicalAdmi@hotmail.com",
+          Subject : "A new doctor asks for approval",
+          Body : "User " + document.getElementById("email").value +  " is seeking permission to become a doctor-type ,Doctor id: " + document.getElementById("dID").value + " To confirm this user: " + link_to,
+          }).then(
+            message => alert("mail sent successfully")
+          );
+        }
+        else{
+          alert("The doctor's id should be over 5 characters")
+        }
+      }
+    </script>
+    
+<script src="js/main.js"></script>
+
+</body>
+
+</html>

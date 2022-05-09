@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Search - ADEN</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+  <!-- Vendor CSS Files -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+
+  <!-- Template Main CSS File -->
+  <link href="css/search.css" rel="stylesheet">
+
+
+  <script type="text/javascript">
+
+    function sort(ind) {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("tbl1");
+      switching = true;
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++) {
+          //start by saying there should be no switching:
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          x = rows[i].getElementsByTagName("TD")[ind];
+          y = rows[i + 1].getElementsByTagName("TD")[ind];
+          //check if the two rows should switch place:
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+  </script>
+</head>
+
+<body>
+
+  <!-- =======  ======= -->
+
+  <%- include('partials/header'); %>
+
+  <!-- End Header -->
+
+  <div class="s004">
+    <form>
+      <fieldset>
+        <legend>WHAT ARE YOU LOOKING FOR?</legend>
+      
+        <strong>Filter by:</strong>
+        <br/>
+        <form>
+          <input type="radio" id="filterbyname" name="fil" value="name" checked='checked'>
+          <label for="name">Name</label>
+          <input type="radio" id="filterbyspecialty" name="fil" value="Specialty">
+          <label for="specialty">Specialty</label>
+        </form>
+
+        <div class="inner-form">
+          <div class="input-field">
+            <input class="form-control" id="choices-text-preset-values" name="search_box" onkeyup="DynamicSearch()" type="text" placeholder="Type to search..." />
+          </div>
+        </div>
+
+        <strong>Sort Table by:</strong>
+        <form>
+          <input type="radio" id="name" name="fil" value="name" onclick=sort(0)>
+          <label for="name">Name</label>
+          <input type="radio" id="specialty" name="fil" value="specialty" onclick=sort(3)>
+          <label for="specialty">Specialty</label>
+        </form> 
+
+        <div class="table-data">
+          <table border="1" id="tbl1">
+              <tr>
+                  
+                  <th>Service provider name </th>
+                  <th>email       </th>
+                  <th>Specialty   </th>
+                  <th>Details Page  </th>
+                <td>
+              </tr>
+            <%
+              if(doc_sess){
+              var i=1;
+
+              doc_sess.forEach(function(data){
+              %>
+
+              <tr>
+                  
+                  <td class="sort1"><%=data.user_name %></td>
+                  <td><%=data.email %></td>
+                  <td class="sort2"><%=data.work_clinic %></td>
+              </tr>
+              <%  i++; }) %>
+              <% } else{ %>
+                  <tr>
+                      <td colspan="8">When you perform a search, the table will adjust itself as required.<br/>
+                        The table will change when we find your doctor</td>
+                  </tr>
+              <% } %>
+          </table>
+          
+          </div>
+          <br/>
+          <br/>
+
+      </fieldset>
+    </form>
+  </div>
+
+
+
+  <!-- ======= Footer ======= -->
+ 
+  <%- include('partials/footer'); %>
+
+  <!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="vendor/purecounter/purecounter.js"></script>
+  <script src="vendor/swiper/swiper-bundle.min.js"></script>
+
+
+
+
+
+  <!--===============================================================================================-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Template Main JS File -->
+
+
+
+  <script>
+    function DynamicSearch() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("choices-text-preset-values");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("tbl1");
+      tr = table.getElementsByTagName("tr");
+      var filterbyname = document.getElementById("filterbyname")
+      var filterbywc = document.getElementById("filterbywc")
+      var filterbyspecialty = document.getElementById("filterbyspecialty")
+      
+      if(filterbyname.checked == true){
+        idx = 0;
+      }
+      else if(filterbywc.checked == true){
+        idx = 2;
+      }
+      else if(filterbyspecialty.checked == true){
+        idx = 3;
+      }
+      
+
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[idx];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+    }
+  </script>
+
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>
